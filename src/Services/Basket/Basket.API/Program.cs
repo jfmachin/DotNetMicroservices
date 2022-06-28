@@ -1,12 +1,11 @@
-using Catalog.API.Data;
-
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddScoped<ICatalogContext, CatalogContext>();
 builder.Services.AddControllers();
+builder.Services.AddStackExchangeRedisCache(opt => {
+    opt.Configuration = builder.Configuration.GetConnectionString("redis");
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 
 var app = builder.Build();
 

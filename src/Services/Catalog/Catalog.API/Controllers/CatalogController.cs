@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using Catalog.API.Data;
-using Catalog.API.Models.DTOs;
+﻿using Catalog.API.Data;
 using Catalog.API.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
@@ -12,12 +10,10 @@ namespace Catalog.API.Controllers {
     public class CatalogController : ControllerBase {
         private readonly ICatalogContext catalogContext;
         private readonly ILogger logger;
-        private readonly IMapper mapper;
-
-        public CatalogController(ICatalogContext catalogContext, ILogger<CatalogController> logger, IMapper mapper) {
+        
+        public CatalogController(ICatalogContext catalogContext, ILogger<CatalogController> logger) {
             this.catalogContext = catalogContext;
             this.logger = logger;
-            this.mapper = mapper;
         }
 
         [HttpGet]
@@ -29,8 +25,8 @@ namespace Catalog.API.Controllers {
 
         [HttpGet("{id:length(24)}", Name = "GetProduct")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProductById(string id) {
+        [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<Product>> GetProductById(string id) {
             var product = await catalogContext.Products.Find(x => x.Id == id).FirstOrDefaultAsync();
             if (product == null) {
                 logger.LogError($"Product {id} not found");
@@ -49,8 +45,7 @@ namespace Catalog.API.Controllers {
 
         [HttpPost]
         [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<Product>> CreateProduct([FromBody] ProductDTO productDTO) {
-            var product = mapper.Map<Product>(productDTO);
+        public async Task<ActionResult<Product>> CreateProduct([FromBody] Product product) {
             await catalogContext.Products.InsertOneAsync(product);
             return CreatedAtRoute("GetProduct", new { id = product.Id }, product);
         }
