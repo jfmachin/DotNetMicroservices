@@ -42,7 +42,6 @@ namespace Discount.gRPC.Services {
 
             var couponModel = mapper.Map<CouponModel>(coupon);
             return couponModel;
-
         }
 
         public override async Task<DeleteDiscountResponse> DeleteDiscount(DeleteDiscountRequest request, ServerCallContext context) {
