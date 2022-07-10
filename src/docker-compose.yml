@@ -11,6 +11,9 @@ services:
   discountdb:
     image: postgres
 
+  orderdb:
+    image: mcr.microsoft.com/mssql/server
+
 # apis
   catalog.api:
     image: ${DOCKER_REGISTRY-}catalogapi
@@ -30,6 +33,12 @@ services:
       context: Services/Discount/Discount.API/
       dockerfile: Dockerfile
 
+  ordering.api:
+    image: ${DOCKER_REGISTRY-}orderingapi
+    build:
+      context: Services/Ordering/Ordering.API/
+      dockerfile: Dockerfile
+
   discount.grpc:
     image: ${DOCKER_REGISTRY-}discountgrpc
     build:
@@ -42,6 +51,10 @@ services:
 
   portainer:
     image: portainer/portainer-ce
+
+# broker
+  rabbitmq:
+    image: rabbitmq:management-alpine
 
 volumes:
   mongo_data: 
