@@ -75,6 +75,7 @@ services:
       - "ConnectionStrings:discountURL=http://discount.grpc"
     depends_on:
       - basketdb
+      - rabbitmq
     ports:
       - "8001:80"
 
@@ -105,6 +106,7 @@ services:
       - "ConnectionStrings:sqlserver=Server=orderdb,1433;Database=OrderDb;User Id=sa;Password=Jmachin9112!;"
     depends_on:
       - orderdb
+      - rabbitmq
     ports:
       - "8004:80"
 

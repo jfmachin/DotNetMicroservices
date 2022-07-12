@@ -10,24 +10,24 @@ namespace Ordering.API.Controllers {
     [ApiController]
     [Route("api/v1/[controller]")]
     public class OrderController: ControllerBase {
-        private readonly IMediator mediatR;
+        private readonly IMediator mediator;
 
-        public OrderController(IMediator mediatR) {
-            this.mediatR = mediatR;
+        public OrderController(IMediator mediator) {
+            this.mediator = mediator;
         }
 
         [HttpGet("{userName}", Name = "GetOrder")]
         [ProducesResponseType(typeof(IEnumerable<OrdersDTO>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<IEnumerable<OrdersDTO>>> GetOrdersByUserName(string userName) {
             var query = new GetOrdersListQuery(userName);
-            var orders = await mediatR.Send(query);
+            var orders = await mediator.Send(query);
             return Ok(orders);
         }
 
         [HttpPost(Name = "CheckoutOrder")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<ActionResult<int>> CheckoutOrder([FromBody] CheckoutOrderCommand command) {
-            var result = await mediatR.Send(command);
+            var result = await mediator.Send(command);
             return Ok(result);
         }
 
@@ -35,7 +35,7 @@ namespace Ordering.API.Controllers {
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<int>> UpdateOrder([FromBody] UpdateOrderCommand command) {
-            await mediatR.Send(command);
+            await mediator.Send(command);
             return NoContent();
         }
 
@@ -45,7 +45,7 @@ namespace Ordering.API.Controllers {
         [ProducesDefaultResponseType]
         public async Task<ActionResult<int>> DeleteOrder(int id) {
             var command = new DeleteOrderCommand() { Id = id };
-            await mediatR.Send(command);
+            await mediator.Send(command);
             return NoContent();
         }
     }

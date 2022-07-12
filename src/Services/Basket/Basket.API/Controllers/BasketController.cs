@@ -1,5 +1,9 @@
-﻿using Basket.API.Models.Entities;
+﻿using AutoMapper;
+using Basket.API.Models.Entities;
+using Basket.API.Repositories;
 using Basket.API.Services.gRPC;
+using EventBus.Events;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
@@ -9,22 +13,26 @@ namespace Basket.API.Controllers {
     [ApiController]
     [Route("api/v1/[controller]")]
     public class BasketController : ControllerBase {
-        private readonly IDistributedCache redisCache;
+        private readonly IPublishEndpoint publishEndpoint;
         private readonly DiscountgRPCService discountgRPC;
+        private readonly IMapper mapper;
+        private readonly IBasketRepository repository;
 
-        public BasketController(IDistributedCache redisCache, DiscountgRPCService discountgRPC) {
-            this.redisCache = redisCache;
+        public BasketController(IPublishEndpoint publishEndpoint, DiscountgRPCService discountgRPC, 
+            IMapper mapper, IBasketRepository repository) {
+            this.publishEndpoint = publishEndpoint;
             this.discountgRPC = discountgRPC;
+            this.mapper = mapper;
+            this.repository = repository;
         }
 
         [HttpGet("{username}", Name= "GetBasket")]
         [ProducesResponseType(typeof(ShoppingCart), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<ShoppingCart>> getBasket(string userName) {
-            var basket = await redisCache.GetStringAsync(userName);
-            if (String.IsNullOrEmpty(basket))
+            var basket = await repository.GetBasket(userName);
+            if (basket == null)
                 return Ok(new ShoppingCart(userName));
-            var basketObject = JsonConvert.DeserializeObject<ShoppingCart>(basket);
-            return Ok(basketObject);
+            return Ok(basket);
         }
 
         [HttpPost]
@@ -34,16 +42,31 @@ namespace Basket.API.Controllers {
                 var coupon = await discountgRPC.GetDiscount(item.ProductName);
                 item.Price -= coupon.Amount;
             }
-
-            await redisCache.SetStringAsync(basket.UserName, JsonConvert.SerializeObject(basket));
+            await repository.UpdateBasket(basket);
             return Ok(basket);
         }
 
         [HttpDelete("{userName}", Name = "DeleteBasket")]
         [ProducesResponseType(typeof(ShoppingCart), (int)HttpStatusCode.OK)]
         public async Task<ActionResult> deleteBasket(string userName) {
-            await redisCache.RemoveAsync(userName);
+            await repository.DeleteBasket(userName);
             return Ok();
+        }
+
+        [Route("[action]")]
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.Accepted)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Checkout([FromBody] BasketCheckout basketCheckout) {
+            var basket = await repository.GetBasket(basketCheckout.UserName);
+            if (basket == null)
+                return BadRequest();
+
+            var @event = mapper.Map<BasketCheckoutEvent>(basketCheckout);
+            @event.TotalPrice = basket.TotalPrice;
+            await publishEndpoint.Publish(@event);
+            await repository.DeleteBasket(basketCheckout.UserName);
+            return Accepted();
         }
     }
 }
