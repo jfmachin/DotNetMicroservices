@@ -73,6 +73,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - "ConnectionStrings:redis=basketdb:6379"
       - "ConnectionStrings:discountURL=http://discount.grpc"
+      - "ConnectionStrings:RabbitMQ=amqp://guest:guest@rabbitmq:5672"
     depends_on:
       - basketdb
       - rabbitmq
@@ -104,6 +105,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "ConnectionStrings:sqlserver=Server=orderdb,1433;Database=OrderDb;User Id=sa;Password=Jmachin9112!;"
+      - "ConnectionStrings:RabbitMQ=amqp://guest:guest@rabbitmq:5672"
     depends_on:
       - orderdb
       - rabbitmq
