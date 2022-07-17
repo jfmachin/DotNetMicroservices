@@ -56,6 +56,13 @@ services:
   rabbitmq:
     image: rabbitmq:management-alpine
 
+# api gateway
+  ocelot.apigw:
+    image: ${DOCKER_REGISTRY-}ocelotapigw
+    build:
+      context: API.Gateways/Ocelot.APIGW/
+      dockerfile: Dockerfile
+
 volumes:
   mongo_data: 
   portainer_data:
