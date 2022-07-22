@@ -56,11 +56,17 @@ services:
   rabbitmq:
     image: rabbitmq:management-alpine
 
-# api gateway
+# api gateways
   ocelot.apigw:
     image: ${DOCKER_REGISTRY-}ocelotapigw
     build:
       context: API.Gateways/Ocelot.APIGW/
+      dockerfile: Dockerfile
+
+  shopping.aggregator:
+    image: ${DOCKER_REGISTRY-}shoppingaggregator
+    build:
+      context: API.Gateways/Shopping.Aggregator/
       dockerfile: Dockerfile
 
 volumes:
@@ -68,3 +74,4 @@ volumes:
   portainer_data:
   postgres_data:
   pgadmin_data:
+

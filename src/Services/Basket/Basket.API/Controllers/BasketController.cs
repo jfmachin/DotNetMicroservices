@@ -5,8 +5,6 @@ using Basket.API.Services.gRPC;
 using EventBus.Events;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
-using Newtonsoft.Json;
 using System.Net;
 
 namespace Basket.API.Controllers {

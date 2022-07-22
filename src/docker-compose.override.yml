@@ -112,6 +112,7 @@ services:
     ports:
       - "8004:80"
 
+  # api gateways
   ocelot.apigw:
     container_name: ocelot.apigw
     environment:
@@ -124,6 +125,21 @@ services:
     ports:
       - "8010:80"
 
+  shopping.aggregator:
+    container_name: shopping.aggregator
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "APIEndpoints:Catalog=http://catalog.api"
+      - "APIEndpoints:Basket=http://basket.api"
+      - "APIEndpoints:Ordering=http://ordering.api"
+    depends_on:
+      - ordering.api
+      - basket.api
+      - catalog.api
+    ports:
+      - "8005:80"
+
+  # broker
   rabbitmq:
     container_name: rabbitmq
     restart: always

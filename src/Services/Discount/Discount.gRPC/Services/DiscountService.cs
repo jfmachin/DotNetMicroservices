@@ -7,12 +7,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Discount.gRPC.Services {
     public class DiscountService : DiscountProtoService.DiscountProtoServiceBase {
-        private readonly ILogger<DiscountService> logger;
         private readonly CouponContext couponContext;
         private readonly IMapper mapper;
 
-        public DiscountService(ILogger<DiscountService> logger, CouponContext couponContext, IMapper mapper) {
-            this.logger = logger;
+        public DiscountService(CouponContext couponContext, IMapper mapper) {
             this.couponContext = couponContext;
             this.mapper = mapper;
         }

@@ -4,16 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
-namespace Catalog.API.Controllers {
+namespace Discount.API.Controllers {
     [ApiController]
     [Route("api/v1/[controller]")]
     public class DiscountController : ControllerBase {
         private readonly CouponContext couponContext;
-        private readonly ILogger logger;
         
-        public DiscountController(CouponContext couponContext, ILogger<DiscountController> logger) {
+        public DiscountController(CouponContext couponContext) {
             this.couponContext = couponContext;
-            this.logger = logger;
         }
 
         [HttpGet]
