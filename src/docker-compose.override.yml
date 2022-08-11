@@ -106,9 +106,11 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - "ConnectionStrings:sqlserver=Server=orderdb,1433;Database=OrderDb;User Id=sa;Password=Jmachin9112!;"
       - "ConnectionStrings:RabbitMQ=amqp://guest:guest@rabbitmq:5672"
+      - "ConnectionStrings:IdentityServer=https://identity.server"
     depends_on:
       - orderdb
       - rabbitmq
+      - identity.server
     ports:
       - "8004:80"
 
@@ -146,3 +148,16 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+
+  identity.server:
+    container_name: identity.server
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=asdasd!00
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    ports:
+      - "8006:443"
+      - "8007:80"
+    volumes:
+      - ~/.aspnet/https:/https:ro

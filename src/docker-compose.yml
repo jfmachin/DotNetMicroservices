@@ -69,9 +69,14 @@ services:
       context: API.Gateways/Shopping.Aggregator/
       dockerfile: Dockerfile
 
+  identity.server:
+    image: ${DOCKER_REGISTRY-}identityserver
+    build:
+      context: Identity/Identity.Server/
+      dockerfile: Dockerfile
+
 volumes:
   mongo_data: 
   portainer_data:
   postgres_data:
   pgadmin_data:
-

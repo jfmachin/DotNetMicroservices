@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Ordering.Application.Features.Orders.Commands.CheckoutOrder;
 using Ordering.Application.Features.Orders.Commands.DeleteOrder;
@@ -8,6 +9,7 @@ using System.Net;
 
 namespace Ordering.API.Controllers {
     [ApiController]
+    [Authorize]
     [Route("api/v1/[controller]")]
     public class OrderController: ControllerBase {
         private readonly IMediator mediator;

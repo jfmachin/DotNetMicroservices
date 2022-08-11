@@ -7,6 +7,7 @@
     <DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..\..</DockerfileContext>
+    <UserSecretsId>2d9cf207-3212-447c-a6a6-a296a7d42b17</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,6 +16,7 @@
     <PackageReference Include="MassTransit" Version="8.0.4" />
     <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.6">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -1,5 +1,6 @@
 using EventBus.Common;
 using MassTransit;
+using Microsoft.IdentityModel.Tokens;
 using Ordering.API.EventBusConsumer;
 using Ordering.API.Extensions;
 using Ordering.Application;
@@ -23,6 +24,17 @@ builder.Services.AddMassTransit(config => {
     });
 });
 
+// auth
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options => {
+        options.Authority = builder.Configuration.GetConnectionString("IdentityServer");
+        options.TokenValidationParameters = new TokenValidationParameters { ValidateAudience = false };
+        options.BackchannelHttpHandler = new HttpClientHandler { 
+            ServerCertificateCustomValidationCallback = delegate { return true; }
+        };
+    }
+);
+
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddScoped<BasketCheckoutConsumer>();
 builder.Services.AddControllers();
@@ -36,6 +48,7 @@ if (app.Environment.IsDevelopment()) {
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
