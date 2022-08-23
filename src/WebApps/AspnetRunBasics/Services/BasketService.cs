@@ -12,14 +12,8 @@ namespace AspnetRunBasics.Services {
             this.httpClient = httpClient;
         }
 
-        public async Task CheckoutBasket(BasketCheckoutModel model) {
-            var response = await httpClient.PostAsJson($"/basket/checkout", model);
-            if (!response.IsSuccessStatusCode)
-                throw new Exception("Something went wrong when calling api");
-        }
-
         public async Task<BasketModel> GetBasket(string userName) {
-            var response = await httpClient.GetAsync($"/catalog/{userName}");
+            var response = await httpClient.GetAsync($"/basket/{userName}");
             return await response.ReadContentAs<BasketModel>();
         }
 
@@ -28,6 +22,12 @@ namespace AspnetRunBasics.Services {
             if (response.IsSuccessStatusCode)
                 return await response.ReadContentAs<BasketModel>();
             else
+                throw new Exception("Something went wrong when calling api");
+        }
+
+        public async Task CheckoutBasket(BasketCheckoutModel model) {
+            var response = await httpClient.PostAsJson($"/basket/checkout", model);
+            if (!response.IsSuccessStatusCode)
                 throw new Exception("Something went wrong when calling api");
         }
     }

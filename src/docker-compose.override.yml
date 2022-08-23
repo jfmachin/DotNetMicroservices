@@ -157,7 +157,22 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Password=asdasd!00
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     ports:
-      - "8006:443"
-      - "8007:80"
+      - "8007:443"
+      - "8008:80"
     volumes:
       - ~/.aspnet/https:/https:ro
+
+  # webapps
+  aspnetrunbasics:
+    container_name: aspnetrunbasics
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ApiSettings:APIGW=http://ocelot.apigw"
+    depends_on:
+      - ocelot.apigw
+      - catalog.api
+      - basket.api
+      - discount.api
+      - ordering.api
+    ports:
+      - "8006:80"

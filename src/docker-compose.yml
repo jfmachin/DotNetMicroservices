@@ -75,6 +75,12 @@ services:
       context: Identity/Identity.Server/
       dockerfile: Dockerfile
 
+  aspnetrunbasics:
+    image: ${DOCKER_REGISTRY-}aspnetrunbasics
+    build:
+      context: WebApps/AspnetRunBasics/
+      dockerfile: Dockerfile
+
 volumes:
   mongo_data: 
   portainer_data:

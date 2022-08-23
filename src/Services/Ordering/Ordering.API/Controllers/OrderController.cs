@@ -9,7 +9,7 @@ using System.Net;
 
 namespace Ordering.API.Controllers {
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [Route("api/v1/[controller]")]
     public class OrderController: ControllerBase {
         private readonly IMediator mediator;
