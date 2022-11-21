@@ -41,7 +41,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ocelot.APIGW", "API.Gateway
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shopping.Aggregator", "API.Gateways\Shopping.Aggregator\Shopping.Aggregator.csproj", "{F98AA556-0733-46BD-A802-9FFB4048894D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Indentity", "Indentity", "{0B582D2A-8188-4E29-9329-201869D0DF7F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{0B582D2A-8188-4E29-9329-201869D0DF7F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Server", "Identity\Identity.Server\Identity.Server.csproj", "{86930154-6A17-4EEF-BB98-92E82DCBD2F9}"
 EndProject
